@@ -1,143 +1,164 @@
+import java.util.*;
+
 public class Car {
+    private final String name;
     private DriveMode driveMode;
     private double speedLimit;
     private double cabTemp;
+    private final double minCabTemp = 5.0;
+    private final double maxCabTemp = 30.0;
+    private final double minSpeedLimit = 30.0;
+    private final double maxSpeedLimit = 200.0;
+    private final double speedLimitSwitchValue = 0.5;
+    private final double cabTempSwitchValue = 1.0;
+    private final boolean isRotatingDriveMode = false;
+    private final DriveMode minDriveMode = DriveMode.ECO;
+    private final DriveMode maxDriveMode = DriveMode.SPORT;
 
-    public Car(DriveMode driveMode, double speedLimit, double cabTemp) {
-        this.driveMode = driveMode;
-        constrainDriveMode();
-        speedLimit = Math.round(speedLimit * 10.0)/10.0;
-        speedLimit = ((int)(speedLimit * 2 + 0.5)/2.0);
-        this.speedLimit = speedLimit;
-        constrainSpeedLimit();
-        this.cabTemp = cabTemp;
-        constrainCabTemp();
+    public Car(String name, DriveMode driveMode, double speedLimit, double cabTemp) {
+        this.name = name;
+        this.driveMode = constrainDriveMode(driveMode);
+        this.speedLimit = constrainSpeedLimit(roundSpeedLimit(speedLimit));
+        this.cabTemp = constrainCabTemp(cabTemp);
+    }
+
+    // Class getters
+    public String getName() {
+        return name;
     }
 
     public DriveMode getDriveMode() {
         return this.driveMode;
     }
+
     public double getSpeedLimit() {
         return this.speedLimit;
     }
+
     public double getCabTemp() {
         return this.cabTemp;
     }
 
+    // Assigns value to driveMode
     public void setDriveMode(DriveMode driveMode) {
-        this.driveMode = driveMode;
-        constrainDriveMode();
+        this.driveMode = constrainDriveMode(driveMode);
     }
-    public boolean checkDriveMode() {
-        return driveMode == DriveMode.ECO || driveMode == DriveMode.CITY || driveMode == DriveMode.SPORT;
-    }
-    private void constrainDriveMode() {
-        if(!checkDriveMode()) {
-            System.out.println("Invalid drive mode, setting mode to eco.");
-            this.driveMode = DriveMode.ECO;
+
+        private DriveMode constrainDriveMode(DriveMode driveMode) {
+        if(!isRotatingDriveMode) {
+            if(driveMode.compareTo(minDriveMode)<0) {
+                System.out.println("Invalid drive mode.");
+                return minDriveMode;
+            }
+            else if(driveMode.compareTo(maxDriveMode)>0) {
+                System.out.println("Invalid drive mode.");
+                return maxDriveMode;
+            }
+            else {
+                this.driveMode = driveMode;
+                return this.driveMode;
+            }
+        }
+        else if(driveMode.compareTo(minDriveMode)<0) {
+                System.out.println("Setting drive mode to " + maxDriveMode + ".");
+                return maxDriveMode;
+            }
+        else if(driveMode.compareTo(maxDriveMode)>0) {
+                System.out.println("Setting drive mode to " + minDriveMode + ".");
+                return minDriveMode;
+            }
+        else {
+            this.driveMode = driveMode;
+            System.out.println("Setting drive mode to " + this.driveMode + ".");
+            return this.driveMode;
         }
     }
 
+    // Assigns value to speedLimit
     public void setSpeedLimit(double speedLimit) {
-        this.speedLimit = speedLimit;
-        constrainSpeedLimit();
-    }
-    public boolean checkSpeedLimit() {
-        return !(this.speedLimit < 30.0) && !(this.speedLimit > 200.0);
-    }
-    private void constrainSpeedLimit() {
-        if(!checkSpeedLimit()) {
-            System.out.println("Invalid value, setting minimum speed limit.");
-            this.speedLimit = 30.0;
-        }
+        this.speedLimit = constrainSpeedLimit(speedLimit);
     }
 
+    // Rounds the value od speedLimit to one decimal point (either 0 or 5)
+    private double roundSpeedLimit(double speedLimit) {
+        speedLimit = Math.round(speedLimit * 10.0)/10.0;
+        speedLimit = ((int)((speedLimit * 2 + 0.5)/2.0));
+        return speedLimit;
+    }
+
+    // Verifies the parameter of speedLimit
+       private double constrainSpeedLimit(double speedLimit) {
+        if(speedLimit > maxSpeedLimit) {
+            System.out.println("Invalid value, setting the speed limit of " + maxSpeedLimit + " km/h.");
+            return maxSpeedLimit;
+        }
+        else if(speedLimit < minSpeedLimit) {
+            System.out.println("Invalid value, setting the speed limit of " + minSpeedLimit + " km/h.");
+            return minSpeedLimit;
+        }
+        else {
+            this.speedLimit = speedLimit;
+        } return this.speedLimit;
+    }
+
+    // Assigns value to cabTemp
     public void setCabTemp(double cabTemp) {
         this.cabTemp = cabTemp;
-        constrainCabTemp();
+        constrainCabTemp(cabTemp);
     }
-    public boolean checkCabTemp() {
-        return !(cabTemp < 5.0) && !(cabTemp > 30.0);
-    }
-    private void constrainCabTemp() {
-        if(!checkCabTemp()) {
-            System.out.println("Invalid temperature value, setting temperature to 21 \u00b0C.");
-            this.cabTemp = 21.0;
+
+    // Verifies the parameter of cabTemp
+    private double constrainCabTemp(double cabTemp) {
+        if(cabTemp > maxCabTemp) {
+            System.out.println("Invalid temperature value, setting temperature to " + maxCabTemp + " \u00b0C.");
+            return maxCabTemp;
         }
+        else if(cabTemp < minCabTemp) {
+            System.out.println("Invalid temperature value, setting temperature to " + minCabTemp + " \u00b0C.");
+            return minCabTemp;
+        }
+        else {
+            this.cabTemp = cabTemp;
+        }
+        return this.cabTemp;
     }
 
     //Switches the drive mode in the car
-    public DriveMode nextDriveMode() {
-        switch (getDriveMode()) {
-            case ECO:
-                this.driveMode = DriveMode.CITY;
-                return this.driveMode;
-            case CITY:
-                this.driveMode = DriveMode.SPORT;
-                return this.driveMode;
-            case SPORT:
-                this.driveMode = DriveMode.ECO;
-                return this.driveMode;
-            default:
-                return null;
-        }
+    public void nextDriveMode() {
+        constrainDriveMode(driveMode.nextDriveMode());
+        System.out.println("Setting drive mode to: " + this.driveMode + ".");
     }
-    public DriveMode prevDriveMode() {
-        switch (getDriveMode()) {
-            case ECO:
-                this.driveMode = DriveMode.SPORT;
-                return this.driveMode;
-            case SPORT:
-                this.driveMode = DriveMode.CITY;
-                return this.driveMode;
-            case CITY:
-                this.driveMode = DriveMode.ECO;
-                return this.driveMode;
-            default:
-                return null;
-        }
+
+    public void prevDriveMode() {
+        constrainDriveMode(driveMode.previousDriveMode());
+        System.out.println("Setting drive mode to: " + this.driveMode + ".");
+
     }
 
     //Switches the speed limit in the car
     public void speedLimitUp() {
-        if(this.speedLimit + 0.5 > 200.0) {
-            System.out.println("The speed limit cannot be higher than 200 km/h.");
-            this.speedLimit = 200.0;
-        } else {
-            this.speedLimit += 0.5;
-        }
+        constrainSpeedLimit((this.speedLimit + speedLimitSwitchValue));
         System.out.println("Current speed limit: " + this.speedLimit + " km/h.");
     }
+
     public void speedLimitDown() {
-        if(this.speedLimit - 0.5 < 30.0) {
-            System.out.println("The speed limit cannot be lower than 30 km/h.");
-            this.speedLimit = 30.0;
-        }
-        else this.speedLimit -= 0.5;
-
+        constrainSpeedLimit((this.speedLimit - speedLimitSwitchValue));
         System.out.println("Current speed limit: " + this.speedLimit + " km/h.");
     }
 
+    // Switches the cabin temperature in the car
     public void cabTempUp() {
-        if(this.cabTemp + 1.0 > 30.0) {
-            System.out.println("The cabin temperature cannot be higher than 30 \u00b0C.");
-            this.cabTemp = 30.0;
-        }
-        else this.cabTemp +=1.0;
-
+        constrainCabTemp((this.cabTemp + cabTempSwitchValue));
         System.out.println("Current cabin temperature: " + this.cabTemp + " \u00b0C.");
     }
+
     public void cabTempDown() {
-        if (this.cabTemp + 1.0 < 5.0) {
-            System.out.println("The cabin temperature cannot be lower than 5 \u00b0C.");
-            this.cabTemp = 5.0;
-        }
-        else this.cabTemp -= 1.0;
-
+        constrainCabTemp((this.cabTemp - cabTempSwitchValue));
         System.out.println("Current cabin temperature: " + this.cabTemp + " \u00b0C.");
     }
 
-    public void showStatus() {
-        System.out.println("Current cabin temperature: " + getCabTemp() + " \u00b0C, current speed limit: " + getSpeedLimit() + " km/h, current drive mode: " + getDriveMode());
+    // Displays current parameters of the car
+    public String toString() {
+        return "||************CAR STATUS************||" + "\n  Current cabin temperature: " + getCabTemp() + " \u00b0C\n  Current speed limit: " + getSpeedLimit() + " km/h\n  Current drive mode: " + getDriveMode() + "\n||**********************************||";
     }
 }

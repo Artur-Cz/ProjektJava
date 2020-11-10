@@ -1,12 +1,11 @@
+import java.util.*;
+
 public class BMW extends Car {
-    private final String name;
 
     public BMW(DriveMode driveMode, double speedLimit, double cabTemp) {
-        super(driveMode, speedLimit, cabTemp);
-        this.name = "BMW";
+        super("BMW", driveMode, speedLimit, cabTemp);
     }
 
-    @Override
     public boolean checkCabTemp() {
         return !(getCabTemp() < 0.0) && !(getCabTemp() > 35.0);
     }

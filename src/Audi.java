@@ -1,8 +1,8 @@
-public class Audi extends Car {
-    private final String name;
+import java.util.*;
 
-    public Audi(DriveMode driveMode, double speedLimit, double cabTemp, String name) {
-        super(driveMode, speedLimit, cabTemp);
-        this.name = "Audi";
+public class Audi extends Car {
+
+    public Audi(DriveMode driveMode, double speedLimit, double cabTemp) {
+        super("Audi", driveMode, speedLimit, cabTemp);
     }
 }
