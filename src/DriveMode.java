@@ -1,17 +1,14 @@
-import java.util.*;
-
 public enum DriveMode {
     DEFAULT, ECO, CITY, SPORT, TURBO;
 
-    private static DriveMode[] vals = values();
+    private static final DriveMode[] vals = values();
 
-    public DriveMode nextDriveMode()
+    public DriveMode countNextDriveMode()
     {
         return vals[(this.ordinal()+1) % vals.length];
     }
 
-    public DriveMode previousDriveMode()
-    {
+    public DriveMode countPreviousDriveMode() {
         return vals[(this.ordinal()-1) % vals.length];
     }
 }

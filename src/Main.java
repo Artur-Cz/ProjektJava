@@ -1,11 +1,12 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
-        Skoda skodA = new Skoda(DriveMode.DEFAULT, 50.0,25.0);
-        skodA.prevDriveMode();
-        System.out.println(skodA);
+        Ferrari ferrA = new Ferrari(DriveMode.TURBO, 90.8, 31.0, 10.5);
+        BMW bmwA = new BMW(DriveMode.SPORT, 190.0, 34.0, 8.5);
+
+        System.out.println(ferrA);
+        ferrA.fullSpeedAcceleration();
     }
-
-
 }

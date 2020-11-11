@@ -1,12 +1,17 @@
-import java.util.*;
-
 public class Ferrari extends Car {
 
-    public Ferrari(DriveMode driveMode, double speedLimit, double cabTemp) {
-        super("Ferrari", driveMode, speedLimit, cabTemp);
-    }
+    public Ferrari(DriveMode driveMode, double speedLimit, double cabTemp, double accelerationValue) {
 
-    public boolean checkDriveMode() {
-        return getDriveMode() == DriveMode.ECO || getDriveMode() == DriveMode.CITY || getDriveMode() == DriveMode.SPORT || getDriveMode() == DriveMode.TURBO;
+        super("Ferrari", driveMode, speedLimit, cabTemp, accelerationValue);
+
+        maxDriveMode = DriveMode.TURBO;
+        isRotatingDriveMode = false;
+        speedLimitSwitchValue = 1.0;
+        maxSpeedLimit = 240.0;
+        minSpeedLimit = 50.0;
+
+        setDriveMode(driveMode);
+        setSpeedLimit(speedLimit);
+        setCabTemp(cabTemp);
     }
 }

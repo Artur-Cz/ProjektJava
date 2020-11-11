@@ -1,8 +1,11 @@
-import java.util.*;
-
 public class Audi extends Car {
 
-    public Audi(DriveMode driveMode, double speedLimit, double cabTemp) {
-        super("Audi", driveMode, speedLimit, cabTemp);
+    public Audi (DriveMode driveMode, double speedLimit, double cabTemp, double accelerationValue) {
+
+        super("Audi", driveMode, speedLimit, cabTemp, accelerationValue);
+
+        setDriveMode(driveMode);
+        setSpeedLimit(speedLimit);
+        setCabTemp(cabTemp);
     }
 }
